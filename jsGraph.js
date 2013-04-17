@@ -1,6 +1,56 @@
 ﻿(function () {
     var dBody = document.getElementsByTagName("body")[0];
     var circleDoms = document.getElementsByTagName("circle");
+    var lineDoms = document.getElementsByTagName("line");
+
+    for (var lineDomIndex = 0; lineDomIndex < lineDoms.length; lineDomIndex++) {
+        var lineDom = lineDoms[lineDomIndex];
+
+        var x1 = parseInt(lineDom.getAttribute("x1"));
+        var y1 = parseInt(lineDom.getAttribute("y1"));
+
+        var x2 = parseInt(lineDom.getAttribute("x2"));
+        var y2 = parseInt(lineDom.getAttribute("y2"));
+
+        var a = Math.abs(x2 - x1);
+        var b = Math.abs(y2 - y1);
+
+        var dotDoms = [];
+
+        var previousD = 0;
+        for (var idx = 0; idx <= a; idx++) {
+            var d = Math.round((b * idx) / a);
+            var diff = d - previousD;
+            previousD = d;
+            for (var diffIdx = 1; diffIdx < diff; diffIdx++) {
+                var dot = document.createElement("div");
+                dot.style.position = "absolute";
+                dot.style.left = (x1 + idx) + "px";
+                dot.style.top = (y1 - d + diffIdx) + "px";
+                dot.style.width = 1 + "px";
+                dot.style.height = 1 + "px";
+                dot.style.backgroundColor = "black";
+                
+                dotDoms.push(dot);
+            }
+
+            var dot = document.createElement("div");
+            dot.style.position = "absolute";
+            dot.style.left = (x1 + idx) + "px";
+            dot.style.top = (y1 - d) + "px";
+            dot.style.width = 1 + "px";
+            dot.style.height = 1 + "px";
+            dot.style.backgroundColor = "black";
+
+            dotDoms.push(dot);
+        }
+
+
+        for (var i = 0; i < dotDoms.length; i++) {
+            dBody.appendChild(dotDoms[i]);
+        }
+
+    }
 
     for (var circleDomIndex = 0; circleDomIndex < circleDoms.length; circleDomIndex++) {
         var circleDom = circleDoms[circleDomIndex];
