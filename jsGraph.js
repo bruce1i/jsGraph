@@ -2,6 +2,7 @@
     var b1i = window.Bruce1i = window.Bruce1i || {};
     var fn = b1i.Graph = {};
 
+    //todo:
     //window.Bruce1i = window.Bruce1i || {};
     //var fn = Bruce1i.Graph = {};
 
@@ -82,14 +83,36 @@
 
             var x1 = parseInt(lineDom.getAttribute("x1"));
             var y1 = parseInt(lineDom.getAttribute("y1"));
-
             var x2 = parseInt(lineDom.getAttribute("x2"));
             var y2 = parseInt(lineDom.getAttribute("y2"));
+            var size = parseInt(lineDom.getAttribute("size") || 1);
+            var color = lineDom.getAttribute("color") || "black";
 
             var a = Math.abs(x2 - x1);
             var b = Math.abs(y2 - y1);
 
             var dotDoms = [];
+
+            var lineDirection = _this.lineHelper.getDirection({ x: x1, y: y1 }, { x: x2, y: y2 });
+
+            if (lineDirection == "dot") {
+                dotDoms.push(_this.newDot({ x: x1, y: y1, size: size, color: color }));
+            }
+            else if (lineDirection == "straighty") {
+                var offset = Math.min(y1, y2);
+                for (var idx = 0; idx < b; idx++) {
+                    dotDoms.push(_this.newDot({ x: x1, y: offset + idx, size: size, color: color }));
+                }
+            }
+            else if (lineDirection == "straightx") {
+                var offset = Math.min(x1, x2);
+                for (var idx = 0; idx < a; idx++) {
+                    dotDoms.push(_this.newDot({ x: offset + idx, y: y1, size: size, color: color }));
+                }
+            }
+            else if (lineDirection == "45c") {
+                // there have a bug. 45c has up or down.
+            }
 
             var previousP = 0;
             for (var idx = 0; idx <= a; idx++) {
@@ -139,6 +162,7 @@
                 pe = p1;
             }
 
+            //todo: 
             //ps = p1.x > p2.x ? p2 : p1;
             //pe = p1.x > p2.x ? p1 : p2;
 
