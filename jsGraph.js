@@ -17,32 +17,25 @@
 
         var dotDoms = [];
 
-        var previousD = 0;
+        var previousP = 0;
         for (var idx = 0; idx <= a; idx++) {
-            var d = Math.round((b * idx) / a);
-            var diff = d - previousD;
-            previousD = d;
-            for (var diffIdx = 1; diffIdx < diff; diffIdx++) {
-                var dot = document.createElement("div");
-                dot.style.position = "absolute";
-                dot.style.left = (x1 + idx) + "px";
-                dot.style.top = (y1 - d + diffIdx) + "px";
-                dot.style.width = 1 + "px";
-                dot.style.height = 1 + "px";
-                dot.style.backgroundColor = "black";
-                
-                dotDoms.push(dot);
+            var p = Math.round((b * idx) / a);
+            var diff = p - previousP;
+            previousP = p;
+
+            if (diff == 0) {
+                dotDoms.push(createDot(x1 + idx, y1 - p));
+                continue;
             }
 
-            var dot = document.createElement("div");
-            dot.style.position = "absolute";
-            dot.style.left = (x1 + idx) + "px";
-            dot.style.top = (y1 - d) + "px";
-            dot.style.width = 1 + "px";
-            dot.style.height = 1 + "px";
-            dot.style.backgroundColor = "black";
+            for (var diffIdx = 0; diffIdx < diff; diffIdx++) {
+                var avgDiff = Math.floor(diff / 2);
+                var leftIdx = avgDiff;
+                var rightIdx = diff - avgDiff;
 
-            dotDoms.push(dot);
+
+                dotDoms.push(createDot(x1 + idx, y1 - p + diffIdx));
+            }
         }
 
 
@@ -146,5 +139,19 @@
             dBody.appendChild(dotDoms[i]);
         }
     }
+
+    function createDot(x, y) {
+        var dot = document.createElement("div");
+
+        dot.style.position = "absolute";
+        dot.style.left = x + "px";
+        dot.style.top = y + "px";
+        dot.style.width = "1px";
+        dot.style.height = "1px";
+        dot.style.backgroundColor = "black";
+
+        return dot;
+    }
+
 
 })();
