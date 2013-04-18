@@ -1,10 +1,6 @@
 ﻿(function () {
-    var b1i = window.Bruce1i = window.Bruce1i || {};
-    var fn = b1i.Graph = {};
-
-    //todo:
-    //window.Bruce1i = window.Bruce1i || {};
-    //var fn = Bruce1i.Graph = {};
+    window.Bruce1i = window.Bruce1i || {};
+    var fn = Bruce1i.Graph = {};
 
     // private
     var _this = {};
@@ -42,7 +38,7 @@
             var border = parseInt(circleDom.getAttribute("border"));
             var color = circleDom.getAttribute("color") || "black";
 
-            var p = Math.sqrt((r * r) / 2);
+            var p = Math.ceil(Math.sqrt((r * r) / 2));
 
             var dotDoms = [];
 
