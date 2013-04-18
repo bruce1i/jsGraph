@@ -110,34 +110,56 @@
                     dotDoms.push(_this.newDot({ x: offset + idx, y: y1, size: size, color: color }));
                 }
             }
-            else if (lineDirection == "45c") {
-                // there have a bug. 45c has up or down.
-            }
-
-            var previousP = 0;
-            for (var idx = 0; idx <= a; idx++) {
-                var p = Math.round((b * idx) / a);
-                var diff = p - previousP;
-                previousP = p;
-
-                if (diff == 0) {
-                    dotDoms.push(_this.newDot({ x: x1 + idx, y: y1 - p }));
-                    continue;
+            else if (lineDirection == "up45") {
+                var x = Math.min(x1, x2);
+                var y = Math.max(y1, y2);
+                for (var idx = 0; idx < a; idx++) {
+                    dotDoms.push(_this.newDot({ x: x + idx, y: y - idx, size: size, color: color }));
                 }
-
-                for (var diffIdx = 0; diffIdx < diff; diffIdx++) {
-                    var avgDiff = Math.floor(diff / 2);
-                    var leftIdx = avgDiff;
-                    var rightIdx = diff - avgDiff;
-
-                    dotDoms.push(_this.newDot({ x: x1 + idx, y: y1 - p + diffIdx }));
+            }
+            else if (lineDirection == "upx") {
+                var x = Math.min(x1, x2);
+                var y = Math.max(y1, y2);
+                for (var idx = 0; idx < a; idx++) {
+                    var p = Math.round((b * idx) / a);
+                    dotDoms.push(_this.newDot({ x: x + idx, y: y - p, size: size, color: color }));
+                }
+            }
+            else if (lineDirection == "upy") {
+                var x = Math.min(x1, x2);
+                var y = Math.max(y1, y2);
+                for (var idx = 0; idx < b; idx++) {
+                    var p = Math.round((a * idx) / b);
+                    dotDoms.push(_this.newDot({ x: x + p, y: y - idx, size: size, color: color }));
+                }
+            }
+            else if (lineDirection == "down45") {
+                var x = Math.min(x1, x2);
+                var y = Math.min(y1, y2);
+                for (var idx = 0; idx < a; idx++) {
+                    dotDoms.push(_this.newDot({ x: x + idx, y: y + idx, size: size, color: color }));
+                }
+            }
+            else if (lineDirection == "downx") {
+                var x = Math.min(x1, x2);
+                var y = Math.min(y1, y2);
+                for (var idx = 0; idx < a; idx++) {
+                    var p = Math.round((b * idx) / a);
+                    dotDoms.push(_this.newDot({ x: x + idx, y: y + p, size: size, color: color }));
+                }
+            }
+            else if (lineDirection == "downy") {
+                var x = Math.min(x1, x2);
+                var y = Math.min(y1, y2);
+                for (var idx = 0; idx < b; idx++) {
+                    var p = Math.round((a * idx) / b);
+                    dotDoms.push(_this.newDot({ x: x + p, y: y + idx, size: size, color: color }));
                 }
             }
 
             for (var i = 0; i < dotDoms.length; i++) {
                 _this.body.appendChild(dotDoms[i]);
             }
-
         }
     };
 
@@ -155,29 +177,33 @@
                 return "straightx";
             }
 
-            var ps = p1;
-            var pe = p2;
-            if (p1.x > p2.x) {
-                ps = p2;
-                pe = p1;
-            }
-
-            //todo: 
-            //ps = p1.x > p2.x ? p2 : p1;
-            //pe = p1.x > p2.x ? p1 : p2;
+            var ps = p1.x < p2.x ? p1 : p2;
+            var pe = p1.x < p2.x ? p2 : p1;
 
             var a = Math.abs(pe.x - ps.x);
             var b = Math.abs(pe.y - ps.y);
 
-            if (a == b) {
-                return "45c";
-            }
-
             if (ps.y > pe.y) {
-                return "up";
+                if (a == b) {
+                    return "up45";
+                }
+
+                if (a > b) {
+                    return "upx";
+                }
+
+                return "upy";
             }
 
-            return "down";
+            if (a == b) {
+                return "down45";
+            }
+
+            if (a > b) {
+                return "downx";
+            }
+
+            return "downy";
         }
     };
 
